@@ -1,4 +1,4 @@
-# Mikronode
+# Expect For Node
       
   A stream based Expect utility for interacting with streams.
   
