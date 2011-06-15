@@ -57,7 +57,7 @@
   * Large set of commands to react to matched patterns in stream.
 
 ## TODO
-  * Write tests to make sure everything keeps working while making above changes.
+  * Write tests.
 
 ## API
 
