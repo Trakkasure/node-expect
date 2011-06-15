@@ -5,7 +5,7 @@
      var Expect = require('node-expect');
      var socket = new require('net').Socket({type:'tcp4'});
      var parser = new Expect();
-
+     var p = new promise();
      parser.conversation(/connect/i) // Start a conversation matching the connection text from the telnet server in the stream as the trigger.
                 .sync()           // The expect rules are synchronous, and run in order.
                 .expect(/login/i)     // First expect rule matches the login prompt.
@@ -18,6 +18,8 @@
                                       // This allows you to restart conversation matching on a synchronous rule set without needing to match the conversation trigger.
                 .branch(/\$ /)        // Another branch to match.
                   .push()             // Push match back into the stream. The end result is that the next conversation will pick up the match since we are ending this one.
+                  .emit('connected')  // Emit an event named "connected". Other parts of the program can k
+                  .handler(p.fulfil)  // Call the fulfil function of the promise.
                   .end()              // End this conversation.
            .conversation(/\$ /)       // Start this conversation on a shell prompt. This conversation won't be synchronous.
                 .expect(null,true)    // Don't expect anything. The conversation trigger is enough. Just do the action. Then consume this rule, not to run again.
@@ -25,13 +27,25 @@
                 .expect(/\$ /)        // Expecting the prompt again.
                   .send("exit")
                 .expect(/closed/i)
+                  .handler(           // Call an anonymous handler
+                   function(){
+                     socket.destroy();// Be sure to destroy the socket so node isn't left hanging.
+                  });
                   .end()              // End this conversation.
-                   
+           .monitor(socket);          // Monitor the socket for input. Also, uses the socket as its output.
+
+     socket.connect(23,'127.0.0.1');
+
+     p.when(function() {
+        console.log('We logged in!');
+     });
 
 ## Installation
 
   Clone this repository into your node_modules directory.
+
   - or -
+
      $ npm install node-expect
 
 
