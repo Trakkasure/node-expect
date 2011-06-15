@@ -1,0 +1,13 @@
+{
+  "name": "node-expect",
+  "description": "Expect style stream parser for Node",
+  "version": "0.1.0",
+  "author": "Brandon Myers <trakkasure@gmail.com>",
+  "contributors": [ 
+    { "name": "Brandon Myers", "email": "trakkasure@gmail.com" }
+  ],
+  "keywords": ["expect", "parser", "stream","buffer"],
+  "repository": "git://github.com/trakkasure/node-expect",
+  "main": "lib/index",
+  "engines": { "node": ">= 0.4.0" }
+}
